@@ -1,0 +1,6 @@
+{
+  "name": "PocketGo",
+  "description": "PocketGo - E-Wallet of SMK Setia Alam. Track spending, top up, and manage student school cards.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

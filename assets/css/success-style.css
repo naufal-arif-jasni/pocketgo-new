@@ -1,0 +1,9 @@
+@import "common-style.css";
+
+.success-screen{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 24px;text-align:center;}
+.success-icon{font-size:4rem;margin-bottom:16px;}
+.success-screen h2{font-size:1.4rem;font-weight:800;margin-bottom:8px;}
+.success-screen p{color:#666;margin-bottom:24px;}
+.receipt-box{background:#fffbe6;border-radius:16px;padding:20px;width:100%;max-width:360px;text-align:left;border:1.5px solid #FFD700;margin-bottom:24px;}
+.receipt-row{display:flex;justify-content:space-between;font-size:.88rem;margin-bottom:8px;}
+.receipt-row:last-child{margin-bottom:0;}

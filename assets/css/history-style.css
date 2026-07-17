@@ -1,0 +1,17 @@
+@import "common-style.css";
+
+.filter-tabs{display:flex;gap:8px;margin-bottom:18px;overflow-x:auto;padding-bottom:4px;}
+.filter-tab{padding:8px 16px;border-radius:50px;border:1.5px solid #e0e0e0;background:#fff;font-size:.82rem;font-weight:600;cursor:pointer;white-space:nowrap;transition:all .2s;font-family:'Poppins',sans-serif;}
+.filter-tab.active{background:#C8102E;color:#fff;border-color:#C8102E;}
+.date-label{font-size:.76rem;font-weight:600;color:#666;margin:14px 0 8px;}
+.txn-list{display:flex;flex-direction:column;gap:10px;}
+.txn-item{background:#fff;border-radius:10px;padding:14px 16px;display:flex;align-items:center;gap:12px;border:1px solid #e0e0e0;}
+.txn-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0;}
+.txn-icon.topup{background:#fffbe6;}
+.txn-icon.spend{background:#f5e6e9;}
+.txn-info{flex:1;}
+.txn-info h4{font-size:.88rem;font-weight:600;}
+.txn-info p{font-size:.76rem;color:#666;}
+.txn-amount{font-weight:700;font-size:.92rem;}
+.txn-amount.pos{color:#1a9e5c;}
+.txn-amount.neg{color:#C8102E;}

@@ -1,0 +1,38 @@
+@import "common-style.css";
+
+.admin-dashboard-stats{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:24px;}
+.admin-stat-card{background:rgba(255,255,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:12px;padding:20px;backdrop-filter:blur(10px);}
+.admin-stat-card .stat-label{color:#6a6a8a;font-size:.75rem;text-transform:uppercase;letter-spacing:1px;}
+.admin-stat-card .stat-value{color:#00d4ff;font-size:1.8rem;font-weight:800;margin-top:4px;}
+.admin-stat-card .stat-sub{color:#4a4a6a;font-size:.72rem;margin-top:2px;}
+
+.admin-table-container{background:rgba(255,255,255,.05);border:1px solid rgba(0,212,255,.2);border-radius:12px;padding:20px;margin-bottom:20px;overflow-x:auto;}
+.admin-table-container h3{color:#00d4ff;font-size:1rem;margin-bottom:16px;}
+.admin-table{width:100%;font-size:.82rem;border-collapse:collapse;}
+.admin-table th{text-align:left;padding:10px 8px;border-bottom:2px solid rgba(0,212,255,.3);color:#00d4ff;font-weight:600;}
+.admin-table td{padding:10px 8px;border-bottom:1px solid rgba(255,255,255,.05);color:#b0b0d0;}
+.admin-table tr:hover{background:rgba(0,212,255,.05);}
+.admin-table .actions{display:flex;gap:6px;}
+.admin-table .action-btn{padding:4px 10px;border-radius:4px;font-size:.7rem;font-weight:600;border:none;cursor:pointer;transition:all .2s;}
+.admin-table .action-btn.edit{background:rgba(0,212,255,.2);color:#00d4ff;}
+.admin-table .action-btn.edit:hover{background:rgba(0,212,255,.3);}
+.admin-table .action-btn.delete{background:rgba(255,0,64,.2);color:#ff0040;}
+.admin-table .action-btn.delete:hover{background:rgba(255,0,64,.3);}
+.admin-table .status-active{color:#00ff88;}
+.admin-table .status-inactive{color:#ff0040;}
+
+.admin-form-modal .modal-sheet{background:#0a0a1a;border:1px solid rgba(0,212,255,.2);}
+.admin-form-modal .modal-title{color:#00d4ff;}
+.admin-form-modal label{color:#b0b0d0;}
+.admin-form-modal input{background:rgba(255,255,255,.05);border-color:rgba(0,212,255,.2);color:#fff;}
+.admin-form-modal input:focus{border-color:#00d4ff;}
+
+.admin-actions-bar{display:flex;gap:10px;margin-bottom:20px;flex-wrap:wrap;}
+.admin-actions-bar .btn{font-size:.82rem;padding:10px 20px;}
+
+.text-neon{color:#00d4ff;}
+.text-neon-green{color:#00ff88;}
+.text-muted-admin{color:#6a6a8a;}
+.border-neon{border:1px solid rgba(0,212,255,.2);}
+.bg-admin-dark{background:#0a0a1a;}
+.glow-text{text-shadow:0 0 20px rgba(0,212,255,.3);}

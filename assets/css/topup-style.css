@@ -1,0 +1,518 @@
+@import "common-style.css";
+
+.amount-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:14px;}
+.amount-btn{padding:13px 8px;border-radius:10px;border:1.5px solid #e0e0e0;background:#fff;font-weight:700;font-size:.9rem;cursor:pointer;transition:all .2s;font-family:'Poppins',sans-serif;}
+.amount-btn:hover,.amount-btn.active{border-color:#C8102E;background:#f5e6e9;color:#C8102E;}
+
+/* Payment Gateway Inline Styles (Matching Image) */
+.payment-gateway-card {
+  border-radius: 20px;
+  padding: 24px;
+  background: #fff;
+  border: 1px solid #eaeaea;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+}
+.pg-title {
+  font-family: 'Poppins', sans-serif;
+  font-size: 1.15rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 2px;
+}
+.pg-subtitle {
+  font-size: 0.8rem;
+  color: #7a7a7a;
+  margin-bottom: 18px;
+}
+.pg-tabs-container {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+  scrollbar-width: none; /* Firefox */
+}
+.pg-tabs-container::-webkit-scrollbar {
+  display: none; /* Safari & Chrome */
+}
+.pg-tab-pill {
+  padding: 8px 18px;
+  border-radius: 50px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: all .2s;
+  font-family: 'Poppins', sans-serif;
+  border: 1.5px solid #eaeaea;
+  background: #fff;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+.pg-tab-pill.active {
+  background: #C8102E;
+  color: #fff;
+  border-color: #C8102E;
+}
+.pg-powered-by {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 18px;
+  font-size: 0.72rem;
+  color: #888;
+}
+.powered-label {
+  font-weight: 500;
+}
+.powered-badge {
+  display: inline-block;
+  padding: 2px 8px;
+  border-radius: 50px;
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: #fff;
+  text-transform: uppercase;
+}
+.powered-badge.billplz { background: #0056b3; }
+.powered-badge.ipay88 { background: #f37021; }
+.powered-badge.molpay { background: #e11b22; }
+
+/* Warning Alert Banner */
+.pg-info-banner {
+  background: #fffbeb;
+  border: 1.5px solid #ffeeba;
+  border-radius: 12px;
+  padding: 12px 14px;
+  font-size: 0.76rem;
+  line-height: 1.4;
+  color: #856404;
+  margin-bottom: 20px;
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.banner-icon {
+  font-size: 0.9rem;
+}
+.banner-text {
+  font-weight: 500;
+}
+
+/* Sections */
+.pg-content-sec {
+  transition: opacity 0.2s ease;
+}
+.sec-heading {
+  font-size: 0.92rem;
+  font-weight: 700;
+  color: #1a1a1a;
+  margin-bottom: 12px;
+  font-family: 'Poppins', sans-serif;
+}
+
+/* Bank Grid (Matching Image Selection style) */
+.bank-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.bank-btn {
+  background: #fff;
+  border: 1.5px solid #eaeaea;
+  border-radius: 12px;
+  padding: 12px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+.bank-btn:hover {
+  background: #fdfdfd;
+  border-color: #d0d0d0;
+}
+.bank-btn.active {
+  background: #fdf3f4;
+  border-color: #C8102E;
+}
+.bank-logo {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+.bank-name {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #111;
+}
+
+/* E-wallet Inline Grid */
+.ew-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.ew-btn {
+  background: #fff;
+  border: 1.5px solid #eaeaea;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  text-align: left;
+}
+.ew-btn:hover {
+  background: #fdfdfd;
+  border-color: #d0d0d0;
+}
+.ew-btn.active {
+  background: #fdf3f4;
+  border-color: #C8102E;
+}
+.ew-logo-sq {
+  width: 38px;
+  height: 38px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.75rem;
+  font-weight: 800;
+  color: #fff;
+  flex-shrink: 0;
+}
+.ew-text-container {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.25;
+}
+.ew-title {
+  font-size: 0.82rem;
+  font-weight: 700;
+  color: #111;
+}
+.ew-desc {
+  font-size: 0.7rem;
+  color: #7a7a7a;
+}
+
+/* Card Selection Inline */
+.card-mini-row {
+  background: #fff;
+  border: 1.5px solid #eaeaea;
+  border-radius: 12px;
+  padding: 12px 14px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  width: 100%;
+  margin-bottom: 10px;
+}
+.card-mini-row.active {
+  background: #fdf3f4;
+  border-color: #C8102E;
+}
+.card-mini-icon {
+  font-size: 1.5rem;
+}
+.card-mini-num {
+  font-family: 'Poppins', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 700;
+  color: #111;
+}
+.card-mini-sub {
+  font-size: 0.7rem;
+  color: #7a7a7a;
+}
+.card-btn-link {
+  border: 1.5px dashed #ccc;
+  background: #fafafa;
+  color: #C8102E;
+  padding: 14px;
+  text-align: center;
+  border-radius: 12px;
+  font-size: 0.82rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  width: 100%;
+  margin-top: 10px;
+}
+.card-btn-link:hover {
+  background: #f5e6e9;
+  border-color: #C8102E;
+}
+
+/* ──────────────── MOCK GATEWAY SIMULATOR OVERLAY ──────────────── */
+.gateway-sim-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  font-family: 'Inter', sans-serif;
+}
+.gateway-sim-box {
+  background: #f4f6f9;
+  border-radius: 20px;
+  width: 100%;
+  max-width: 440px;
+  overflow: hidden;
+  box-shadow: 0 15px 50px rgba(0,0,0,0.3);
+  border: 1px solid #ddd;
+}
+.gateway-sim-header {
+  background: #111;
+  color: #fff;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.gw-sim-lock {
+  color: #00d4ff;
+  font-size: 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+.gateway-sim-body {
+  padding: 24px;
+  min-height: 320px;
+  display: flex;
+  flex-direction: column;
+}
+.gw-sim-logo-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  background: #fff;
+  padding: 12px 16px;
+  border-radius: 12px;
+  border: 1px solid #eaeaea;
+}
+.merchant-badge {
+  text-align: right;
+}
+.merchant-name {
+  font-size: 0.8rem;
+  font-weight: 700;
+  color: #1a1a1a;
+}
+.merchant-desc {
+  font-size: 0.65rem;
+  color: #888;
+}
+
+/* Gateway States */
+.gw-sim-state {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
+}
+.gw-sim-state.center {
+  align-items: center;
+  text-align: center;
+}
+.spinner-sim {
+  width: 44px;
+  height: 44px;
+  border: 4px solid rgba(200, 16, 46, 0.1);
+  border-top-color: #C8102E;
+  border-radius: 50%;
+  animation: spinSim 1s infinite linear;
+  margin-bottom: 16px;
+}
+@keyframes spinSim {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+/* Bank Auth Login Elements */
+.bank-auth-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+.bank-auth-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: #222;
+}
+.bank-auth-subtitle {
+  font-size: 0.75rem;
+  color: #666;
+}
+.sim-form-group {
+  margin-bottom: 14px;
+}
+.sim-form-group label {
+  display: block;
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: #444;
+  text-transform: uppercase;
+  margin-bottom: 4px;
+  letter-spacing: 0.5px;
+}
+.sim-input {
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: 10px;
+  border: 1.5px solid #d0d0d0;
+  font-size: 0.88rem;
+  background: #fff;
+  font-weight: 500;
+}
+.sim-input:focus {
+  border-color: #C8102E;
+  outline: none;
+}
+.sim-btn-primary {
+  background: #C8102E;
+  color: #fff;
+  border: none;
+  padding: 13px;
+  font-weight: 700;
+  border-radius: 10px;
+  font-size: 0.85rem;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 10px;
+  transition: background 0.2s;
+}
+.sim-btn-primary:hover {
+  background: #a00d25;
+}
+.sim-btn-secondary {
+  background: transparent;
+  color: #666;
+  border: none;
+  padding: 8px;
+  font-weight: 600;
+  font-size: 0.78rem;
+  cursor: pointer;
+  width: 100%;
+  margin-top: 8px;
+}
+
+/* OTP Code Box */
+.otp-box-sim {
+  background: #fff;
+  padding: 18px;
+  border-radius: 12px;
+  border: 1px solid #eaeaea;
+  text-align: center;
+  margin-bottom: 16px;
+}
+.otp-num-badge {
+  background: #fff3cd;
+  color: #856404;
+  padding: 4px 10px;
+  border-radius: 4px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  display: inline-block;
+  margin-top: 6px;
+}
+
+/* Success Checkmark Circle Animation */
+.success-circle-sim {
+  width: 60px;
+  height: 60px;
+  background: #e6f4ea;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2.2rem;
+  color: #137333;
+  margin-bottom: 16px;
+  animation: scaleSim 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275) both;
+}
+@keyframes scaleSim {
+  0% { transform: scale(0); }
+  100% { transform: scale(1); }
+}
+
+/* Legacy UI utilities and overrides */
+.hidden { display: none !important; }
+.pb { padding-bottom: 120px !important; }
+
+/* Custom transactional PIN display alignment */
+.pin-display {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  margin-bottom: 14px;
+}
+.pin-dot {
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid #e0e0e0;
+  transition: all .2s;
+}
+.pin-dot.filled {
+  background: #C8102E;
+  border-color: #C8102E;
+}
+.payment-summary {
+  background: #f8f8f8;
+  border-radius: 12px;
+  padding: 14px;
+  margin: 10px 0;
+  border-left: 4px solid #C8102E;
+}
+.pin-pad {
+  display: grid;
+  grid-template-columns: repeat(3,1fr);
+  gap: 8px;
+  margin: 10px 0;
+}
+.pin-btn {
+  padding: 14px;
+  border-radius: 10px;
+  border: 1.5px solid #e0e0e0;
+  background: #fff;
+  font-size: 1.1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all .2s;
+  font-family: 'Poppins', sans-serif;
+}
+.pin-btn:hover {
+  background: #f5e6e9;
+  border-color: #C8102E;
+}
+
+
