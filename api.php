@@ -36,8 +36,9 @@ if (!$pdo) {
     sendError('Database connection failed. Please ensure MySQL is running and pocketgo_db is imported.', 500);
 }
 
-// Hydrate user record with multiple cards and Visa card information
+// Hydrate user record with multiple cards and Visa card information from separated relational tables
 function hydrateUser($user) {
+    global $pdo;
     if (!$user) return null;
     $user['balance'] = (float)$user['balance'];
     $user['daily_limit'] = (float)$user['daily_limit'];
@@ -45,11 +46,38 @@ function hydrateUser($user) {
     $user['topupCount'] = (int)$user['topupCount'];
 
     $cards = [];
-    if (!empty($user['cards_json'])) {
+    try {
+        // Query normalized student_cards and students tables
+        $stmt = $pdo->prepare("
+            SELECT sc.*, s.name AS student_name, s.student_id, s.class 
+            FROM student_cards sc
+            JOIN students s ON sc.student_id = s.student_id
+            WHERE s.userId = ?
+        ");
+        $stmt->execute([$user['id']]);
+        $rows = $stmt->fetchAll();
+        if ($rows && count($rows) > 0) {
+            foreach ($rows as $row) {
+                $cards[] = [
+                    'card_serial' => $row['card_serial'],
+                    'student_name' => $row['student_name'],
+                    'student_id' => $row['student_id'],
+                    'class' => $row['class'],
+                    'balance' => (float)$row['balance'],
+                    'daily_limit' => (float)$row['daily_limit'],
+                    'status' => $row['status']
+                ];
+            }
+        }
+    } catch (\Exception $e) {
+        // Fallback to legacy behavior if table query fails
+    }
+
+    if (empty($cards) && !empty($user['cards_json'])) {
         $cards = json_decode($user['cards_json'], true);
     }
     
-    // Backwards-compatible fallback if cards_json is empty
+    // Backwards-compatible fallback if cards are still empty
     if (empty($cards) && (!empty($user['card_serial']) || !empty($user['studentId']))) {
         $cards = [
             [
@@ -66,7 +94,23 @@ function hydrateUser($user) {
     $user['cards'] = $cards;
 
     $visa = null;
-    if (!empty($user['visa_card_json'])) {
+    try {
+        // Query normalized visa_cards table
+        $stmtV = $pdo->prepare("SELECT * FROM visa_cards WHERE userId = ? LIMIT 1");
+        $stmtV->execute([$user['id']]);
+        $vRow = $stmtV->fetch();
+        if ($vRow) {
+            $visa = [
+                'cardholder_name' => $vRow['cardholder_name'],
+                'card_number' => $vRow['card_number'],
+                'expiry_date' => $vRow['expiry_date']
+            ];
+        }
+    } catch (\Exception $e) {
+        // Fallback to legacy behavior if table query fails
+    }
+
+    if (!$visa && !empty($user['visa_card_json'])) {
         $visa = json_decode($user['visa_card_json'], true);
     }
     $user['visa_card'] = $visa;
@@ -231,7 +275,14 @@ switch ($action) {
             }
         }
 
-        // Save back
+        // Save back to both separated student_cards table and synced users table
+        try {
+            $stmtCardUp = $pdo->prepare("UPDATE student_cards SET daily_limit = ? WHERE card_serial = ?");
+            $stmtCardUp->execute([$limit, $cardSerial]);
+        } catch (\Exception $e) {
+            // Silently ignore if table doesn't exist
+        }
+
         $stmtUp = $pdo->prepare("UPDATE users SET daily_limit = ?, cards_json = ? WHERE id = ?");
         $stmtUp->execute([$syncLimit, json_encode($cards), $user['id']]);
 
@@ -324,6 +375,23 @@ switch ($action) {
             $limitVal = 50.00;
         }
 
+        // Save to normalized student and cards tables, and fallback to users table
+        try {
+            // Check if student profile already exists
+            $stmtCheckS = $pdo->prepare("SELECT id FROM students WHERE student_id = ?");
+            $stmtCheckS->execute([$studentNric]);
+            if (!$stmtCheckS->fetch()) {
+                $stmtInsS = $pdo->prepare("INSERT INTO students (userId, student_id, name, class) VALUES (?, ?, ?, ?)");
+                $stmtInsS->execute([$user['id'], $studentNric, $studentName, $class]);
+            }
+
+            // Insert card record
+            $stmtInsC = $pdo->prepare("INSERT INTO student_cards (student_id, card_serial, balance, daily_limit, status) VALUES (?, ?, 0.00, 50.00, 'active')");
+            $stmtInsC->execute([$studentNric, $cardSerial]);
+        } catch (\Exception $e) {
+            // Silently ignore if tables don't exist
+        }
+
         $stmtUp = $pdo->prepare("UPDATE users SET child = ?, childClass = ?, studentId = ?, card_serial = ?, balance = ?, daily_limit = ?, cards_json = ? WHERE id = ?");
         $stmtUp->execute([$childName, $childCls, $sid, $serial, $bal, $limitVal, json_encode($cards), $user['id']]);
 
@@ -369,6 +437,19 @@ switch ($action) {
             'card_number' => $maskedCard,
             'expiry_date' => $expiry
         ];
+
+        // Save to normalized visa_cards table
+        try {
+            // Delete previous visa card for user (one visa card per user logic)
+            $stmtDelV = $pdo->prepare("DELETE FROM visa_cards WHERE userId = ?");
+            $stmtDelV->execute([$user['id']]);
+
+            // Insert new visa card
+            $stmtInsV = $pdo->prepare("INSERT INTO visa_cards (userId, cardholder_name, card_number, expiry_date) VALUES (?, ?, ?, ?)");
+            $stmtInsV->execute([$user['id'], $cardholder, $maskedCard, $expiry]);
+        } catch (\Exception $e) {
+            // Silently ignore if table doesn't exist
+        }
 
         $stmtUp = $pdo->prepare("UPDATE users SET visa_card_json = ? WHERE id = ?");
         $stmtUp->execute([json_encode($visaObj), $user['id']]);
@@ -442,6 +523,20 @@ switch ($action) {
 
         // Sync main column for single-card backwards-compatibility
         $syncBalance = (count($cards) === 1) ? $newCardBalance : $newBalance;
+
+        // Update both student_cards table and payments table (D2: Payment File)
+        try {
+            // Update individual card balance
+            $stmtCardUp = $pdo->prepare("UPDATE student_cards SET balance = balance + ? WHERE card_serial = ?");
+            $stmtCardUp->execute([$amount, $cardSerial]);
+
+            // Save record to payments table (D2: Payment File)
+            $dateStrNow = date('Y-m-d H:i');
+            $stmtPay = $pdo->prepare("INSERT INTO payments (userId, card_serial, amount, method, date, status) VALUES (?, ?, ?, ?, ?, 'Completed')");
+            $stmtPay->execute([$user['id'], $cardSerial, $amount, $method, $dateStrNow]);
+        } catch (\Exception $e) {
+            // Silently ignore if tables don't exist
+        }
 
         $stmtUp = $pdo->prepare("UPDATE users SET balance = ?, topupTotal = ?, topupCount = ?, cards_json = ? WHERE id = ?");
         $stmtUp->execute([$syncBalance, $newTopupTotal, $newTopupCount, json_encode($cards), $user['id']]);

@@ -855,6 +855,73 @@ app.post('/api/admin/report/delete', (req, res) => {
   res.json({ success: true });
 });
 
+// ── RFID TERMINAL PROCESS.PHP SIMULATOR FOR LIVE PREVIEW ──
+app.all('/process.php', (req, res) => {
+  let cardUid = req.body?.card_uid;
+  if (!cardUid && req.query?.card_uid) {
+    cardUid = req.query.card_uid;
+  }
+  if (!cardUid) {
+    return res.status(400).json({ success: false, message: 'No card UID detected.' });
+  }
+
+  const cleanUid = String(cardUid).replace(/[^A-Za-z0-9]/g, '').trim();
+  const paddedUid = cleanUid.padStart(10, '0');
+
+  const db = getDB();
+  let matched = false;
+  let cardDetails: any = null;
+
+  for (const user of db.users) {
+    const hydrated = hydrateUserNode(user);
+    const cards = hydrated.cards || [];
+    const foundCard = cards.find((c: any) => 
+      String(c.card_serial).trim() === cleanUid || 
+      String(c.card_serial).trim() === paddedUid
+    );
+
+    if (foundCard) {
+      matched = true;
+      cardDetails = {
+        student_name: foundCard.student_name,
+        student_id: foundCard.student_id,
+        class: foundCard.class,
+        balance: parseFloat(foundCard.balance).toFixed(2),
+        daily_limit: parseFloat(foundCard.daily_limit).toFixed(2),
+        status: foundCard.status.charAt(0).toUpperCase() + foundCard.status.slice(1),
+        parent_name: user.name
+      };
+      break;
+    }
+  }
+
+  if (matched) {
+    res.json({
+      success: true,
+      uid: cleanUid,
+      matched: true,
+      message: 'Student card scanned and matched!',
+      card_details: cardDetails
+    });
+  } else {
+    res.json({
+      success: true,
+      uid: cleanUid,
+      matched: false,
+      message: 'Card scanned but serial UID is unregistered.',
+      card_details: {
+        student_name: 'Unregistered Chip',
+        student_id: 'N/A',
+        class: 'N/A',
+        balance: '0.00',
+        daily_limit: '0.00',
+        status: 'Unknown',
+        parent_name: 'N/A'
+      }
+    });
+  }
+});
+
 // ── SERVING STATIC ASSETS ──
 
 // Serve CSS from assets/css
