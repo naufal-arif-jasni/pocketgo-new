@@ -35,7 +35,7 @@ require_once 'auth.php';
   <div class="scroll-area pb">
     <!-- Date Header -->
     <div class="greeting">
-      <h2 id="dash-greeting-title">SMK Setia Alam Cashless</h2>
+      <h2 id="dash-greeting-title">SK Setia Alam Cashless</h2>
       <p id="dash-date">Today</p>
     </div>
 

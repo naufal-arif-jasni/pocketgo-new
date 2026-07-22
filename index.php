@@ -23,7 +23,7 @@ require_once 'db_conn.php';
 
   <div class="landing-scroll">
     <header class="hero">
-      <div class="hero-badge"><i class="bi bi-credit-card-2-front-fill me-1 text-warning"></i> SMK SETIA ALAM OFFICIAL WALLET</div>
+      <div class="hero-badge"><i class="bi bi-credit-card-2-front-fill me-1 text-warning"></i> SK SETIA ALAM OFFICIAL WALLET</div>
       <h1>The Smarter Way to<br>Manage <span>School Money</span></h1>
       <p>A secure e-wallet for students to buy food at the canteen and supplies at the bookshop. Fully controlled by parents.</p>
       <div class="hero-btns">
@@ -81,7 +81,7 @@ require_once 'db_conn.php';
     </section>
 
     <footer class="footer">
-      <p>&copy; 2026 <strong>PocketGo</strong>. Developed for SMK Setia Alam.</p>
+      <p>&copy; 2026 <strong>PocketGo</strong>. Developed for SK Setia Alam.</p>
     </footer>
   </div>
 </div>

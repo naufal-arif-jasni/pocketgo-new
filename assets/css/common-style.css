@@ -101,7 +101,8 @@ label{font-size:.88rem;font-weight:600;color:#1a1a1a;margin-bottom:6px;display:b
 .password-container {
   position: relative;
   display: flex;
-  align-items: center;
+  flex-wrap: wrap;
+  align-items: flex-start;
   width: 100%;
 }
 .password-container input {
@@ -111,6 +112,7 @@ label{font-size:.88rem;font-weight:600;color:#1a1a1a;margin-bottom:6px;display:b
 .password-toggle-btn {
   position: absolute;
   right: 14px;
+  top: 13px;
   background: none;
   border: none;
   padding: 0;
@@ -126,5 +128,15 @@ label{font-size:.88rem;font-weight:600;color:#1a1a1a;margin-bottom:6px;display:b
 }
 .password-toggle-btn:hover {
   color: #212529;
+}
+
+.error-msg {
+  color: #C8102E;
+  font-size: 0.78rem;
+  font-weight: 600;
+  margin-top: 4px;
+  display: block;
+  width: 100%;
+  flex-basis: 100%;
 }
 

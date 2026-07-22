@@ -1,5 +1,14 @@
 <?php
 require_once 'db_conn.php';
+
+// Fetch all parents to allow linking from terminal
+$parents = [];
+try {
+    $stmt = $pdo->query("SELECT id, name, email FROM users WHERE role = 'parent' ORDER BY name ASC");
+    $parents = $stmt->fetchAll();
+} catch (\Exception $e) {
+    // Ignore error
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -468,35 +477,92 @@ require_once 'db_conn.php';
           <h2 id="student-name" class="text-center mb-1">Muhammad Faris</h2>
           <p id="student-class" class="text-muted text-center mb-4">4 Amanah · Student ID: PG-40124</p>
 
-          <div class="details-grid">
-            <div class="details-row">
-              <span class="details-label">Card Serial UID</span>
-              <span class="details-value text-monospace" id="result-uid" style="font-weight: 700; color: #4a5568;">1000000001</span>
+          <!-- Standard Details Display Block (Hidden for unregistered cards) -->
+          <div id="registered-card-block">
+            <div class="details-grid">
+              <div class="details-row">
+                <span class="details-label">Card Serial UID</span>
+                <span class="details-value text-monospace" id="result-uid" style="font-weight: 700; color: #4a5568;">1000000001</span>
+              </div>
+              <div class="details-row">
+                <span class="details-label">Card Status</span>
+                <span class="details-value" id="result-status"><span class="badge bg-success">Active</span></span>
+              </div>
+              <div class="details-row">
+                <span class="details-label">Daily Limit</span>
+                <span class="details-value" id="result-limit">RM 50.00</span>
+              </div>
+              <div class="details-row">
+                <span class="details-label">Parent Account</span>
+                <span class="details-value" id="result-parent">Ahmad Bin Abdullah</span>
+              </div>
             </div>
-            <div class="details-row">
-              <span class="details-label">Card Status</span>
-              <span class="details-value" id="result-status"><span class="badge bg-success">Active</span></span>
-            </div>
-            <div class="details-row">
-              <span class="details-label">Daily Limit</span>
-              <span class="details-value" id="result-limit">RM 50.00</span>
-            </div>
-            <div class="details-row">
-              <span class="details-label">Parent Account</span>
-              <span class="details-value" id="result-parent">Ahmad Bin Abdullah</span>
+
+            <div class="text-center">
+              <p class="mb-2" style="font-weight: 500; font-size: 0.9rem; color: #718096;">Remaining Wallet Balance</p>
+              <div class="balance-huge" id="result-balance"><span>RM</span>120.50</div>
             </div>
           </div>
 
-          <div class="text-center">
-            <p class="mb-2" style="font-weight: 500; font-size: 0.9rem; color: #718096;">Remaining Wallet Balance</p>
-            <div class="balance-huge" id="result-balance"><span>RM</span>120.50</div>
+          <!-- Unregistered Link Form Block (Shown ONLY for unregistered cards) -->
+          <div id="unregistered-card-block" style="display: none; text-align: left;">
+            <div style="background-color: #fff9f0; border: 1px solid #ffe8cc; border-radius: 12px; padding: 14px 16px; margin-bottom: 20px;">
+              <h5 style="color: #d97706; font-size: 0.95rem; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 6px;">
+                <i class="bi bi-exclamation-triangle-fill"></i> Unregistered NFC Card
+              </h5>
+              <p style="font-size: 0.8rem; color: #666; margin: 0; line-height: 1.4;">
+                This physical RFID card (UID: <strong id="link-form-uid-display" style="font-family:monospace; color:#333;"></strong>) is currently a dummy card. Link it to a student below.
+              </p>
+            </div>
+
+            <form id="link-student-form" onsubmit="handleLinkStudent(event)">
+              <input type="hidden" id="link-card-serial">
+              
+              <div class="mb-3">
+                <label class="form-label" style="font-weight: 600; font-size: 0.82rem; color: #4a5568;">Parent Account / Owner</label>
+                <select class="form-select" id="link-parent-email" required style="font-size: 0.88rem; padding: 10px 12px; border-radius: 8px;">
+                  <option value="" disabled selected>-- Select Parent --</option>
+                  <?php foreach ($parents as $p): ?>
+                    <option value="<?php echo htmlspecialchars($p['email']); ?>">
+                      <?php echo htmlspecialchars($p['name']); ?> (<?php echo htmlspecialchars($p['email']); ?>)
+                    </option>
+                  <?php endforeach; ?>
+                </select>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" style="font-weight: 600; font-size: 0.82rem; color: #4a5568;">Student Full Name</label>
+                <input type="text" class="form-control" id="link-student-name" placeholder="e.g. Muhammad Faris" required style="font-size: 0.88rem; padding: 10px 12px; border-radius: 8px;">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" style="font-weight: 600; font-size: 0.82rem; color: #4a5568;">Student NRIC (for ID)</label>
+                <input type="text" class="form-control" id="link-student-nric" placeholder="e.g. 120512-10-1234" required style="font-size: 0.88rem; padding: 10px 12px; border-radius: 8px;">
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label" style="font-weight: 600; font-size: 0.82rem; color: #4a5568;">Class</label>
+                <input type="text" class="form-control" id="link-student-class" placeholder="e.g. 4 Amanah" required style="font-size: 0.88rem; padding: 10px 12px; border-radius: 8px;">
+              </div>
+
+              <div class="row g-2 mb-2">
+                <div class="col-6">
+                  <button type="button" class="btn btn-outline-secondary w-100" onclick="resetTerminal()" style="padding: 11px; border-radius: 8px; font-weight: 600; font-size: 0.88rem;">Cancel</button>
+                </div>
+                <div class="col-6">
+                  <button type="submit" class="btn btn-primary w-100" style="padding: 11px; border-radius: 8px; font-weight: 600; font-size: 0.88rem; background-color: var(--primary-color); border-color: var(--primary-color);">Link & Save</button>
+                </div>
+              </div>
+            </form>
           </div>
 
-          <!-- Auto Reset Progress Bar -->
-          <div class="progress" style="height: 4px; border-radius: 2px; background-color: #edf2f7; overflow: hidden;">
-            <div class="countdown-bar" id="reset-progress"></div>
+          <!-- Auto Reset Progress Bar Block -->
+          <div id="countdown-bar-block">
+            <div class="progress" style="height: 4px; border-radius: 2px; background-color: #edf2f7; overflow: hidden;">
+              <div class="countdown-bar" id="reset-progress"></div>
+            </div>
+            <p class="reset-alert"><i class="bi bi-arrow-repeat"></i> Auto-resetting terminal in <span id="reset-countdown">5</span>s...</p>
           </div>
-          <p class="reset-alert"><i class="bi bi-arrow-repeat"></i> Auto-resetting terminal in <span id="reset-countdown">5</span>s...</p>
         </div>
 
       </div>
@@ -702,6 +768,23 @@ require_once 'db_conn.php';
     // Handle results render back to view
     let resetTimer = null;
     let progressInterval = null;
+    let initialLinkFormHtml = '';
+
+    window.addEventListener('DOMContentLoaded', () => {
+      // Keep track of the clean initial form structure
+      const formBlock = document.getElementById('unregistered-card-block');
+      if (formBlock) {
+        initialLinkFormHtml = formBlock.innerHTML;
+      }
+      triggerFocus();
+    });
+
+    function restoreLinkFormStructure() {
+      const formBlock = document.getElementById('unregistered-card-block');
+      if (formBlock && initialLinkFormHtml) {
+        formBlock.innerHTML = initialLinkFormHtml;
+      }
+    }
 
     function displayResult(data) {
       loadingPanel.style.display = 'none';
@@ -716,25 +799,33 @@ require_once 'db_conn.php';
       const parentEl = document.getElementById('result-parent');
       const balanceEl = document.getElementById('result-balance');
 
-      // Set standard fields
-      uidEl.innerText = data.uid || 'Unknown';
+      // Clear any running timers
+      if (resetTimer) clearTimeout(resetTimer);
+      if (progressInterval) clearInterval(progressInterval);
       
       const details = data.card_details || {};
-      nameEl.innerText = details.student_name || 'Unknown student';
-      classEl.innerText = `${details.class || 'N/A'} · Student ID: ${details.student_id || 'N/A'}`;
-      limitEl.innerText = `RM ${details.daily_limit || '0.00'}`;
-      parentEl.innerText = details.parent_name || 'N/A';
-      balanceEl.innerHTML = `<span>RM</span>${details.balance || '0.00'}`;
-
-      // Get initials
-      const names = (details.student_name || 'US').split(' ');
-      const initials = names.length > 1 ? (names[0][0] + names[1][0]).toUpperCase() : names[0].substring(0,2).toUpperCase();
-      initialsEl.innerText = initials;
-
+      
       // Handle card state formatting
       if (data.matched) {
         playSuccessSound();
+        
+        // Show normal details panel
+        document.getElementById('registered-card-block').style.display = 'block';
+        document.getElementById('unregistered-card-block').style.display = 'none';
+        document.getElementById('countdown-bar-block').style.display = 'block';
+
+        nameEl.innerText = details.student_name || 'Unknown student';
+        classEl.innerText = `${details.class || 'N/A'} · Student ID: ${details.student_id || 'N/A'}`;
+        uidEl.innerText = data.uid || 'Unknown';
+        limitEl.innerText = `RM ${parseFloat(details.daily_limit || 0).toFixed(2)}`;
+        parentEl.innerText = details.parent_name || 'N/A';
+        balanceEl.innerHTML = `<span>RM</span>${parseFloat(details.balance || 0).toFixed(2)}`;
+
         initialsEl.style.backgroundColor = 'var(--success-color)';
+        initialsEl.innerHTML = '';
+        const names = (details.student_name || 'US').split(' ');
+        const initials = names.length > 1 ? (names[0][0] + names[1][0]).toUpperCase() : names[0].substring(0,2).toUpperCase();
+        initialsEl.innerText = initials;
         
         const status = (details.status || 'Active').toLowerCase();
         if (status === 'active') {
@@ -742,18 +833,111 @@ require_once 'db_conn.php';
         } else {
           statusEl.innerHTML = `<span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1">${details.status || 'Inactive'}</span>`;
         }
+
+        // Display results card container
+        resultPanel.style.display = 'block';
+
+        // Start countdown auto-reset
+        startResetCountdown(5);
       } else {
         playErrorSound();
+        
+        // Show registration / linking form inside terminal card
+        document.getElementById('registered-card-block').style.display = 'none';
+        document.getElementById('unregistered-card-block').style.display = 'block';
+        document.getElementById('countdown-bar-block').style.display = 'none';
+
+        nameEl.innerText = 'Unregistered Card';
+        classEl.innerText = 'Tap a parent profile below to link this chip';
+
         initialsEl.style.backgroundColor = 'var(--warning-color)';
-        initialsEl.innerHTML = '<i class="bi bi-exclamation-triangle" style="font-size:1.8rem;color:white;"></i>';
-        statusEl.innerHTML = `<span class="badge bg-warning-subtle text-warning border border-warning-subtle px-2.5 py-1">Unregistered</span>`;
+        initialsEl.innerHTML = '<i class="bi bi-exclamation-triangle" style="font-size:1.8rem;color:white;display:flex;align-items:center;justify-content:center;height:100%;"></i>';
+
+        // Populate card serial fields in form
+        const serialInput = document.getElementById('link-card-serial');
+        if (serialInput) serialInput.value = data.uid || '';
+        
+        const uidDisplay = document.getElementById('link-form-uid-display');
+        if (uidDisplay) uidDisplay.innerText = data.uid || '';
+
+        // Display results card container
+        resultPanel.style.display = 'block';
+        
+        // Do NOT start auto-reset countdown! Let them register in peace.
+      }
+    }
+
+    // Handle AJAX submission from Terminal Link Student form
+    function handleLinkStudent(event) {
+      event.preventDefault();
+      
+      const serial = document.getElementById('link-card-serial').value;
+      const email = document.getElementById('link-parent-email').value;
+      const name = document.getElementById('link-student-name').value.trim();
+      const nric = document.getElementById('link-student-nric').value.trim();
+      const cls = document.getElementById('link-student-class').value.trim();
+
+      if (!email || !name || !nric || !cls) {
+        alert('Please fill in all student details.');
+        return;
       }
 
-      // Display results card container
-      resultPanel.style.display = 'block';
+      const submitBtn = event.target.querySelector('button[type="submit"]');
+      const origBtnText = submitBtn.innerText;
+      submitBtn.disabled = true;
+      submitBtn.innerText = 'Linking Card...';
 
-      // Start countdown auto-reset
-      startResetCountdown(data.matched ? 5 : 8);
+      fetch('api.php?action=register-card', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          email: email,
+          card_serial: serial,
+          student_name: name,
+          student_nric: nric,
+          class: cls
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.success) {
+          playSuccessSound();
+          
+          // Show delightful success state in the card form
+          const block = document.getElementById('unregistered-card-block');
+          block.innerHTML = `
+            <div class="text-center py-4">
+              <i class="bi bi-check-circle-fill text-success" style="font-size: 3.5rem; display: block; margin-bottom: 12px;"></i>
+              <h4 style="font-weight: 700; color: #1e1e2f; margin-bottom: 6px;">Card Linked Successfully!</h4>
+              <p class="text-muted" style="font-size: 0.85rem; max-width: 280px; margin: 0 auto 20px;">
+                Physical Card <strong>${serial}</strong> has been registered and linked to <strong>${name}</strong>.
+              </p>
+              <div class="spinner-border spinner-border-sm text-primary" role="status" style="margin-right:6px;"></div>
+              <span style="font-size:0.82rem;color:#718096;">Returning to scanner...</span>
+            </div>
+          `;
+          
+          // Reset terminal after 5 seconds
+          setTimeout(() => {
+            restoreLinkFormStructure();
+            resetTerminal();
+          }, 5000);
+        } else {
+          playErrorSound();
+          alert(data.error || 'Failed to link card.');
+          submitBtn.disabled = false;
+          submitBtn.innerText = origBtnText;
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        playErrorSound();
+        alert('Network error registering card.');
+        submitBtn.disabled = false;
+        submitBtn.innerText = origBtnText;
+      });
     }
 
     // Visual progress countdown reset
@@ -786,12 +970,16 @@ require_once 'db_conn.php';
 
     // Reset screen terminal back to scanning status
     function resetTerminal() {
+      if (resetTimer) clearTimeout(resetTimer);
+      if (progressInterval) clearInterval(progressInterval);
+
       resultPanel.style.display = 'none';
       loadingPanel.style.display = 'none';
       scanningPanel.style.display = 'block';
       
       resetProgressBar.style.width = '0%';
       rfidInput.value = '';
+      restoreLinkFormStructure();
       triggerFocus();
     }
   </script>

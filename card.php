@@ -31,7 +31,7 @@ require_once 'auth.php';
       <div class="empty-icon-circle"><i class="bi bi-credit-card-2-front text-muted fs-1"></i></div>
       <h3>No Linked Student Card</h3>
       <p>Link your child's physical school student NFC card to begin managing their e-wallet balance, setting daily spending limits, and monitoring canteen transactions.</p>
-      <button class="btn btn-primary" onclick="showModal('modal-register-card')" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 30px; font-weight: 600; margin-top: 10px;">
+      <button class="btn btn-primary" onclick="openRegisterModal()" style="display: inline-flex; align-items: center; gap: 8px; padding: 12px 24px; border-radius: 30px; font-weight: 600; margin-top: 10px;">
         <i class="bi bi-plus-circle-fill"></i> Register Student Card
       </button>
     </div>
@@ -143,6 +143,12 @@ require_once 'auth.php';
     <div class="modal-title"><i class="bi bi-credit-card-2-front-fill text-danger me-1"></i> Link Student NFC Card</div>
     <p style="font-size:.82rem;color:#666;margin-bottom:18px;">Enter the physical details of your child's PocketGo NFC card to synchronize with the school terminal.</p>
     
+    <!-- Physical RFID Reader Auto-Detection status box -->
+    <div class="rfid-reader-detect-box text-center p-3 border border-dashed rounded" id="modal-rfid-status" style="background-color: #fdf8f8; border-color: #e5b0b0; border-radius: 12px; border: 1.5px dashed #C8102E; margin-bottom: 18px;">
+      <div style="font-size: 1.2rem; color: #C8102E; margin-bottom: 2px;"><i class="bi bi-broadcast"></i> <span style="font-size: 0.8rem; font-weight: 700;">Physical Reader Scanner Active</span></div>
+      <p style="font-size: 0.73rem; color: #666; margin: 0;">Tap card on your USB RFID reader (JT308) now to scan & link serial automatically!</p>
+    </div>
+
     <div class="form-group" style="margin-bottom:14px;">
       <label>10-digit Card Serial No.</label>
       <input type="text" id="reg-card-serial" maxlength="10" placeholder="e.g. 1029483756">

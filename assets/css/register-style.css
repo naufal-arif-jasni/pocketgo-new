@@ -29,5 +29,7 @@ input.valid {
   font-weight: 600;
   margin-top: 4px;
   display: block;
+  width: 100%;
+  flex-basis: 100%;
 }
 

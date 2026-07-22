@@ -20,7 +20,7 @@ require_once 'db_conn.php';
     <div class="auth-inner">
       <div class="auth-logo-box">
         <div class="logo-big">Pocket<span>Go</span></div>
-        <p>SMK Setia Alam Parent Portal Registration</p>
+        <p>SK Setia Alam Parent Portal Registration</p>
       </div>
 
       <div class="auth-card">

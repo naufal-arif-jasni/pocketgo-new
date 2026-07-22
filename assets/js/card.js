@@ -52,7 +52,7 @@ function renderCardPage() {
 
   // Add Card visual slide at the end
   const addSlideHtml = `
-    <div class="add-card-slide" onclick="showModal('modal-register-card')">
+    <div class="add-card-slide" onclick="openRegisterModal()">
       <div class="add-card-plus">${getModernIcon('➕')}</div>
       <div class="add-card-text">Add Card</div>
     </div>
@@ -277,3 +277,116 @@ async function saveLimit() {
     toast('Error updating limit.');
   }
 }
+
+// ── Physical RFID Reader (JT308) Wedge Keyboard Interceptor ──
+let modalRfidBuffer = '';
+let lastModalKeyTime = 0;
+
+document.addEventListener('keydown', (e) => {
+  const modal = document.getElementById('modal-register-card');
+  if (!modal || !modal.classList.contains('show')) return;
+
+  const now = Date.now();
+  
+  if (e.key === 'Enter') {
+    // If we have an accumulated rapid numeric buffer (usually RFID card readers type extremely fast)
+    if (modalRfidBuffer.length >= 8 && modalRfidBuffer.length <= 12 && (now - lastModalKeyTime < 250)) {
+      e.preventDefault();
+      e.stopPropagation();
+      
+      const serialInput = document.getElementById('reg-card-serial');
+      if (serialInput) {
+        serialInput.value = modalRfidBuffer;
+        
+        // Visual feedback & sound effects
+        playReaderBeep();
+        serialInput.style.borderColor = '#2ec4b6';
+        serialInput.style.boxShadow = '0 0 10px rgba(46, 196, 182, 0.2)';
+        
+        const statusBox = document.getElementById('modal-rfid-status');
+        if (statusBox) {
+          statusBox.style.backgroundColor = '#e6fffa';
+          statusBox.style.borderColor = '#2ec4b6';
+          const span = statusBox.querySelector('span');
+          if (span) {
+            span.innerText = 'RFID Card Scanned!';
+            span.style.color = '#2ec4b6';
+          }
+          const p = statusBox.querySelector('p');
+          if (p) {
+            p.innerHTML = `Card UID <strong>${modalRfidBuffer}</strong> successfully populated into Card Serial No.`;
+          }
+        }
+        
+        toast('Physical Card UID captured: ' + modalRfidBuffer);
+        
+        // Automatically focus next field (Student Name)
+        const nameInput = document.getElementById('reg-student-name');
+        if (nameInput) nameInput.focus();
+      }
+      modalRfidBuffer = '';
+    }
+  } else if (e.key >= '0' && e.key <= '9') {
+    if (now - lastModalKeyTime > 150) {
+      modalRfidBuffer = ''; // Reset buffer if typing slow (human typing)
+    }
+    modalRfidBuffer += e.key;
+    lastModalKeyTime = now;
+  }
+});
+
+// Play reader feedback beep using web audio synthesis
+function playReaderBeep() {
+  try {
+    const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = audioCtx.createOscillator();
+    const gainNode = audioCtx.createGain();
+    osc.connect(gainNode);
+    gainNode.connect(audioCtx.destination);
+    gainNode.gain.setValueAtTime(0.08, audioCtx.currentTime);
+    osc.frequency.setValueAtTime(1000, audioCtx.currentTime); // Crisp 1000 Hz beep
+    osc.type = 'sine';
+    osc.start();
+    osc.stop(audioCtx.currentTime + 0.12);
+  } catch (err) {
+    console.warn('Audio feedback blocked by browser.', err);
+  }
+}
+
+// Custom handler to open Register Card Modal with focused elements
+function openRegisterModal() {
+  showModal('modal-register-card');
+  
+  const serialInput = document.getElementById('reg-card-serial');
+  if (serialInput) {
+    serialInput.focus();
+    serialInput.value = '';
+    serialInput.style.borderColor = '';
+    serialInput.style.boxShadow = '';
+  }
+  
+  const nameInput = document.getElementById('reg-student-name');
+  if (nameInput) nameInput.value = '';
+  const nricInput = document.getElementById('reg-student-nric');
+  if (nricInput) nricInput.value = '';
+  const classInput = document.getElementById('reg-student-class');
+  if (classInput) classInput.value = '';
+
+  const statusBox = document.getElementById('modal-rfid-status');
+  if (statusBox) {
+    statusBox.style.backgroundColor = '#fdf8f8';
+    statusBox.style.borderColor = '#e5b0b0';
+    const span = statusBox.querySelector('span');
+    if (span) {
+      span.innerText = 'Physical Reader Scanner Active';
+      span.style.color = '#C8102E';
+    }
+    const p = statusBox.querySelector('p');
+    if (p) {
+      p.innerText = 'Tap card on your USB RFID reader (JT308) now to scan & link serial automatically!';
+    }
+  }
+}
+
+// Make globally accessible
+window.openRegisterModal = openRegisterModal;

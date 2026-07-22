@@ -20,7 +20,7 @@ require_once 'db_conn.php';
     <div class="auth-inner">
       <div class="auth-logo-box">
         <div class="logo-big">Pocket<span>Go</span></div>
-        <p>SMK Setia Alam Cashless Portal</p>
+        <p>SK Setia Alam Cashless Portal</p>
       </div>
 
       <div class="auth-card">

@@ -1,7 +1,7 @@
 {
   "name": "pocketgo",
   "version": "1.0.0",
-  "description": "PocketGo - E-Wallet of SMK Setia Alam. Track spending, top up, and manage student school cards.",
+  "description": "PocketGo - E-Wallet of SK Setia Alam. Track spending, top up, and manage student school cards.",
   "main": "dist/server.cjs",
   "type": "module",
   "scripts": {

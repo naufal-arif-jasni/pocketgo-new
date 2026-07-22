@@ -305,7 +305,7 @@ require_once 'auth.php';
     <p style="text-align:center;font-size:.85rem;color:#666;margin-bottom:18px;">Please enter your 6-digit transaction PIN to authorise this payment.</p>
 
     <div class="payment-summary">
-      <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:4px;"><span style="color:#666;">Payment to</span><strong>SMK Setia Alam</strong></div>
+      <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:4px;"><span style="color:#666;">Payment to</span><strong>SK Setia Alam</strong></div>
       <div style="display:flex;justify-content:space-between;font-size:.82rem;margin-bottom:4px;"><span style="color:#666;">Amount</span><strong style="color:#C8102E;" id="m-sum-amount">RM 0.00</strong></div>
       <div style="display:flex;justify-content:space-between;font-size:.82rem;"><span style="color:#666;">Funding Source</span><span id="m-sum-method" style="font-size:.78rem;">—</span></div>
     </div>
