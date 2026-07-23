@@ -96,44 +96,74 @@ require_once 'auth.php';
           <h4 class="sec-heading">Select Bank</h4>
           <div class="bank-grid">
             <button type="button" class="bank-btn active" onclick="selectBank('Maybank2u', this)">
-              <span class="bank-logo" style="background:#ffcc00;color:#000;">M</span>
-              <span class="bank-name">Maybank2u</span>
+              <span class="bank-logo-sq" style="background:#ffcc00;color:#000;">M</span>
+              <div class="ew-text-container">
+                <span class="ew-title">Maybank2u</span>
+                <span class="ew-desc">Pay via Maybank FPX portal</span>
+              </div>
             </button>
             <button type="button" class="bank-btn" onclick="selectBank('CIMB Clicks', this)">
-              <span class="bank-logo" style="background:#c00000;color:#fff;">C</span>
-              <span class="bank-name">CIMB Clicks</span>
+              <span class="bank-logo-sq" style="background:#c00000;color:#fff;">C</span>
+              <div class="ew-text-container">
+                <span class="ew-title">CIMB Clicks</span>
+                <span class="ew-desc">Pay via CIMB Clicks FPX portal</span>
+              </div>
             </button>
             <button type="button" class="bank-btn" onclick="selectBank('RHB Now', this)">
-              <span class="bank-logo" style="background:#0055b3;color:#fff;">R</span>
-              <span class="bank-name">RHB Now</span>
+              <span class="bank-logo-sq" style="background:#0055b3;color:#fff;">R</span>
+              <div class="ew-text-container">
+                <span class="ew-title">RHB Now</span>
+                <span class="ew-desc">Pay via RHB Now FPX portal</span>
+              </div>
             </button>
             <button type="button" class="bank-btn" onclick="selectBank('Public Bank', this)">
-              <span class="bank-logo" style="background:#0033aa;color:#fff;">P</span>
-              <span class="bank-name">Public Bank</span>
+              <span class="bank-logo-sq" style="background:#0033aa;color:#fff;">P</span>
+              <div class="ew-text-container">
+                <span class="ew-title">Public Bank</span>
+                <span class="ew-desc">Pay via Public Bank FPX portal</span>
+              </div>
             </button>
             <button type="button" class="bank-btn" onclick="selectBank('Hong Leong', this)">
-              <span class="bank-logo" style="background:#e5b800;color:#fff;">H</span>
-              <span class="bank-name">Hong Leong</span>
+              <span class="bank-logo-sq" style="background:#e5b800;color:#fff;">H</span>
+              <div class="ew-text-container">
+                <span class="ew-title">Hong Leong Bank</span>
+                <span class="ew-desc">Pay via Hong Leong Connect</span>
+              </div>
             </button>
             <button type="button" class="bank-btn" onclick="selectBank('AmBank', this)">
-              <span class="bank-logo" style="background:#f37021;color:#fff;">A</span>
-              <span class="bank-name">AmBank</span>
+              <span class="bank-logo-sq" style="background:#f37021;color:#fff;">A</span>
+              <div class="ew-text-container">
+                <span class="ew-title">AmBank</span>
+                <span class="ew-desc">Pay via AmOnline portal</span>
+              </div>
             </button>
             <button type="button" class="bank-btn" onclick="selectBank('BSN', this)">
-              <span class="bank-logo" style="background:#00875a;color:#fff;">B</span>
-              <span class="bank-name">BSN</span>
+              <span class="bank-logo-sq" style="background:#00875a;color:#fff;">B</span>
+              <div class="ew-text-container">
+                <span class="ew-title">BSN</span>
+                <span class="ew-desc">Pay via myBSN portal</span>
+              </div>
             </button>
             <button type="button" class="bank-btn" onclick="selectBank('Bank Islam', this)">
-              <span class="bank-logo" style="background:#005f3f;color:#fff;">BI</span>
-              <span class="bank-name">Bank Islam</span>
+              <span class="bank-logo-sq" style="background:#005f3f;color:#fff;">BI</span>
+              <div class="ew-text-container">
+                <span class="ew-title">Bank Islam</span>
+                <span class="ew-desc">Pay via Bank Islam Internet Banking</span>
+              </div>
             </button>
             <button type="button" class="bank-btn" onclick="selectBank('Alliance', this)">
-              <span class="bank-logo" style="background:#c8102e;color:#fff;">A</span>
-              <span class="bank-name">Alliance</span>
+              <span class="bank-logo-sq" style="background:#c8102e;color:#fff;">A</span>
+              <div class="ew-text-container">
+                <span class="ew-title">Alliance Bank</span>
+                <span class="ew-desc">Pay via Alliance Online</span>
+              </div>
             </button>
             <button type="button" class="bank-btn" onclick="selectBank('Bank Rakyat', this)">
-              <span class="bank-logo" style="background:#009c95;color:#fff;">BR</span>
-              <span class="bank-name">Bank Rakyat</span>
+              <span class="bank-logo-sq" style="background:#009c95;color:#fff;">BR</span>
+              <div class="ew-text-container">
+                <span class="ew-title">Bank Rakyat</span>
+                <span class="ew-desc">Pay via iRakyat portal</span>
+              </div>
             </button>
           </div>
         </div>

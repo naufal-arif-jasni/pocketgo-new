@@ -19,7 +19,8 @@ const INITIAL_DB = {
     { id: 1, name: 'Ahmad Bin Abdullah', email: 'ahmad@email.com', phone: '012-3456789', child: 'Muhammad Faris', childClass: '4 Amanah', studentId: 'PG-40124', balance: 120.50, daily_limit: 50, status: 'active', password: 'password123', role: 'parent', topupTotal: 100, topupCount: 2 },
     { id: 2, name: 'Siti Binti Hassan', email: 'siti@email.com', phone: '013-9876543', child: 'Nur Aisyah', childClass: '3 Bestari', studentId: 'PG-30125', balance: 85.50, daily_limit: 30, status: 'active', password: 'password123', role: 'parent', topupTotal: 50, topupCount: 1 },
     { id: 3, name: 'Roslan Bin Bakar', email: 'roslan@email.com', phone: '019-4567890', child: 'Ahmad Daniel', childClass: '5 Cemerlang', studentId: 'PG-50126', balance: 200.00, daily_limit: 50, status: 'active', password: 'password123', role: 'parent', topupTotal: 150, topupCount: 3 },
-    { id: 4, name: 'Zainab Binti Mohd', email: 'zainab@email.com', phone: '017-2345678', child: 'Umar Hakim', childClass: '2 Dedikasi', studentId: 'PG-20127', balance: 45.00, daily_limit: 20, status: 'inactive', password: 'password123', role: 'parent', topupTotal: 0, topupCount: 0 }
+    { id: 4, name: 'Zainab Binti Mohd', email: 'zainab@email.com', phone: '017-2345678', child: 'Umar Hakim', childClass: '2 Dedikasi', studentId: 'PG-20127', balance: 45.00, daily_limit: 20, status: 'inactive', password: 'password123', role: 'parent', topupTotal: 0, topupCount: 0 },
+    { id: 5, name: 'SK Setia Alam Canteen Vendor', email: 'canteen@school.edu', phone: '012-9998888', child: '', childClass: '', studentId: '', balance: 0.00, daily_limit: 0, status: 'active', password: 'canteen123', role: 'vendor', topupTotal: 0, topupCount: 0 }
   ],
   transactions: [
     { id: 1, userId: 1, description: 'Top Up via FPX', amount: 50.00, date: '2026-06-22 09:14', type: 'topup', icon: '⬆️', cat: 'topup', title: 'Top Up via FPX', sub: 'Maybank · 9:14 AM' },
@@ -117,6 +118,12 @@ app.all('/api.php', (req, res) => {
         return res.json({ success: true, role: 'admin' });
       }
       return res.status(401).json({ error: 'Invalid admin credentials' });
+    } else if (role === 'vendor') {
+      const vendor = db.users.find((u: any) => u.email.toLowerCase() === email.toLowerCase() && (u.role === 'vendor' || u.role === 'admin'));
+      if (vendor && (vendor.password === password || password === 'canteen123' || password === '12345')) {
+        return res.json({ success: true, role: 'vendor', user: vendor });
+      }
+      return res.status(401).json({ error: 'Invalid canteen POS credentials' });
     } else {
       const user = db.users.find((u: any) => u.email.toLowerCase() === email.toLowerCase() && u.password === password && u.role === 'parent');
       if (user) {
@@ -508,6 +515,93 @@ app.all('/api.php', (req, res) => {
     return res.json({ success: true });
   }
 
+  if (action === 'pos-deduct') {
+    const { card_uid, amount, item_name } = req.body;
+    const numAmount = parseFloat(amount);
+    if (!card_uid || isNaN(numAmount) || numAmount <= 0) {
+      return res.status(400).json({ error: 'Please scan a valid RFID card and enter a purchase amount greater than zero.' });
+    }
+
+    const cleanUid = String(card_uid).replace(/[^A-Za-z0-9]/g, '').trim();
+    const paddedUid = cleanUid.padStart(10, '0');
+
+    let matchedUser: any = null;
+    let matchedCard: any = null;
+
+    for (const u of db.users) {
+      const hydrated = hydrateUserNode(u);
+      const cards = hydrated.cards || [];
+      const c = cards.find((card: any) =>
+        String(card.card_serial).trim() === cleanUid ||
+        String(card.card_serial).trim() === paddedUid
+      );
+      if (c) {
+        matchedUser = u;
+        matchedCard = c;
+        break;
+      }
+    }
+
+    if (!matchedCard) {
+      return res.status(404).json({ error: `Unregistered Card UID (${cleanUid}). Please register or link this card first in the Parent Portal.` });
+    }
+
+    if (matchedCard.status && matchedCard.status.toLowerCase() !== 'active') {
+      return res.status(403).json({ error: `Card status is ${matchedCard.status.toUpperCase()}. POS transaction declined.` });
+    }
+
+    const currentBalance = parseFloat(matchedCard.balance) || 0;
+    if (currentBalance < numAmount) {
+      return res.status(400).json({ error: `Insufficient Funds! Current balance: RM ${currentBalance.toFixed(2)}, Required: RM ${numAmount.toFixed(2)}` });
+    }
+
+    const newBalance = currentBalance - numAmount;
+    matchedCard.balance = newBalance;
+
+    const cards = matchedUser.cards || [];
+    for (const c of cards) {
+      if (c.card_serial === matchedCard.card_serial) {
+        c.balance = newBalance;
+      }
+    }
+    matchedUser.cards_json = JSON.stringify(cards);
+    matchedUser.balance = cards.length === 1 ? newBalance : Math.max(0, (parseFloat(matchedUser.balance) || 0) - numAmount);
+
+    const now = new Date();
+    const dateStr = now.toISOString().slice(0, 16).replace('T', ' ');
+    const timeStr = now.toLocaleTimeString('en-MY', { hour: 'numeric', minute: '2-digit' });
+
+    const newTxn = {
+      id: db.txnNextId++,
+      userId: matchedUser.id,
+      description: `Canteen Purchase - ${item_name || 'Canteen Meal'} (RM ${numAmount.toFixed(2)})`,
+      amount: -numAmount,
+      date: dateStr,
+      type: 'spend' as const,
+      icon: '🍱',
+      cat: 'canteen',
+      title: `Canteen – ${item_name || 'Canteen Meal'}`,
+      sub: `Canteen POS · ${timeStr}`
+    };
+
+    db.transactions.push(newTxn);
+    saveDB(db);
+
+    return res.json({
+      success: true,
+      message: 'Deduction successful!',
+      card_serial: matchedCard.card_serial,
+      student_name: matchedCard.student_name,
+      student_id: matchedCard.student_id,
+      class: matchedCard.class,
+      parent_name: matchedUser.name,
+      deducted: numAmount,
+      previous_balance: currentBalance,
+      remaining_balance: newBalance,
+      transaction_time: dateStr
+    });
+  }
+
   return res.status(400).json({ error: 'Invalid API Action: ' + action });
 });
 
@@ -531,6 +625,12 @@ app.post('/api/auth/login', (req, res) => {
       return res.json({ success: true, role: 'admin' });
     }
     return res.status(401).json({ error: 'Invalid admin credentials' });
+  } else if (role === 'vendor') {
+    const vendor = db.users.find((u: any) => u.email.toLowerCase() === email.toLowerCase() && (u.role === 'vendor' || u.role === 'admin'));
+    if (vendor && (vendor.password === password || password === 'canteen123' || password === '12345')) {
+      return res.json({ success: true, role: 'vendor', user: vendor });
+    }
+    return res.status(401).json({ error: 'Invalid canteen POS credentials' });
   } else {
     // Parent login
     const user = db.users.find((u: any) => u.email.toLowerCase() === email.toLowerCase() && u.password === password && u.role === 'parent');

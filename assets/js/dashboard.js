@@ -50,10 +50,14 @@ function renderRecentTxns() {
   const list = document.getElementById('dash-txn-list');
   if (!list) return;
   const items = Store.historyItems.slice(0, 4);
+  if (!items || items.length === 0) {
+    list.innerHTML = '<div style="text-align:center;padding:20px;color:#888;font-size:.9rem;">No recent transactions</div>';
+    return;
+  }
   list.innerHTML = items.map(t => `
     <div class="txn-item">
-      <div class="txn-icon ${t.cat === 'topup' ? 'topup' : 'spend'}">${getModernIcon(t.icon || '💸')}</div>
-      <div class="txn-info"><h4>${t.title || t.description}</h4><p>${t.sub || t.date}</p></div>
+      <div class="txn-icon ${t.cat === 'topup' || t.type === 'topup' ? 'topup' : 'spend'}">${getModernIcon(t.icon || '💸')}</div>
+      <div class="txn-info"><h4>${t.title || t.description}</h4><p>${formatTxnSub(t)}</p></div>
       <div class="txn-amount ${t.amount >= 0 ? 'pos' : 'neg'}">${t.amount >= 0 ? '+' : '-'}RM ${Math.abs(t.amount).toFixed(2)}</div>
     </div>
   `).join('');

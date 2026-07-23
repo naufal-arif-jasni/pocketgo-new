@@ -104,9 +104,10 @@ INSERT INTO `users` (`id`, `name`, `ic`, `email`, `phone`, `child`, `childClass`
 (3, 'Roslan Bin Bakar', '820421-14-5331', 'roslan@email.com', '019-4567890', 'Ahmad Daniel', '5 Cemerlang', 'PG-50126', '1000000003', '[{"card_serial":"1000000003","student_name":"Ahmad Daniel","student_id":"PG-50126","class":"5 Cemerlang","balance":200.00,"daily_limit":50.00,"status":"active"}]', NULL, 200.00, 50.00, 'active', 'password123', 'parent', 150.00, 3),
 (4, 'Zainab Binti Mohd', '880614-10-5882', 'zainab@email.com', '017-2345678', 'Umar Hakim', '2 Dedikasi', 'PG-20127', '1000000004', '[{"card_serial":"1000000004","student_name":"Umar Hakim","student_id":"PG-20127","class":"2 Dedikasi","balance":45.00,"daily_limit":20.00,"status":"active"}]', NULL, 45.00, 20.00, 'inactive', 'password123', 'parent', 0.00, 0);
 
--- Insert Admin Account
+-- Insert Admin & Canteen Vendor Accounts
 INSERT INTO `users` (`id`, `name`, `ic`, `email`, `phone`, `child`, `childClass`, `studentId`, `balance`, `daily_limit`, `status`, `password`, `role`, `topupTotal`, `topupCount`) VALUES
-(5, 'Administrator', '', 'Admin1', '', '', '', '', 0.00, 0.00, 'active', '12345', 'admin', 0.00, 0);
+(5, 'Administrator', '', 'Admin1', '', '', '', '', 0.00, 0.00, 'active', '12345', 'admin', 0.00, 0),
+(6, 'SK Setia Alam Canteen Vendor', '', 'canteen@school.edu', '012-9998888', '', '', '', 0.00, 0.00, 'active', 'canteen123', 'vendor', 0.00, 0);
 
 -- Seed Students
 INSERT INTO `students` (`id`, `userId`, `student_id`, `name`, `class`) VALUES

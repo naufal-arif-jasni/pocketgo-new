@@ -1,0 +1,173 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "name": "Ahmad Bin Abdullah",
+      "email": "ahmad@email.com",
+      "phone": "012-3456789",
+      "child": "Muhammad Faris",
+      "childClass": "4 Amanah",
+      "studentId": "PG-40124",
+      "balance": 120.5,
+      "daily_limit": 50,
+      "status": "active",
+      "password": "password123",
+      "role": "parent",
+      "topupTotal": 100,
+      "topupCount": 2
+    },
+    {
+      "id": 2,
+      "name": "Siti Binti Hassan",
+      "email": "siti@email.com",
+      "phone": "013-9876543",
+      "child": "Nur Aisyah",
+      "childClass": "3 Bestari",
+      "studentId": "PG-30125",
+      "balance": 85.5,
+      "daily_limit": 30,
+      "status": "active",
+      "password": "password123",
+      "role": "parent",
+      "topupTotal": 50,
+      "topupCount": 1
+    },
+    {
+      "id": 3,
+      "name": "Roslan Bin Bakar",
+      "email": "roslan@email.com",
+      "phone": "019-4567890",
+      "child": "Ahmad Daniel",
+      "childClass": "5 Cemerlang",
+      "studentId": "PG-50126",
+      "balance": 200,
+      "daily_limit": 50,
+      "status": "active",
+      "password": "password123",
+      "role": "parent",
+      "topupTotal": 150,
+      "topupCount": 3
+    },
+    {
+      "id": 4,
+      "name": "Zainab Binti Mohd",
+      "email": "zainab@email.com",
+      "phone": "017-2345678",
+      "child": "Umar Hakim",
+      "childClass": "2 Dedikasi",
+      "studentId": "PG-20127",
+      "balance": 45,
+      "daily_limit": 20,
+      "status": "inactive",
+      "password": "password123",
+      "role": "parent",
+      "topupTotal": 0,
+      "topupCount": 0
+    },
+    {
+      "id": 5,
+      "name": "SK Setia Alam Canteen Vendor",
+      "email": "canteen@school.edu",
+      "phone": "012-9998888",
+      "child": "",
+      "childClass": "",
+      "studentId": "",
+      "balance": 0,
+      "daily_limit": 0,
+      "status": "active",
+      "password": "canteen123",
+      "role": "vendor",
+      "topupTotal": 0,
+      "topupCount": 0
+    }
+  ],
+  "transactions": [
+    {
+      "id": 1,
+      "userId": 1,
+      "description": "Top Up via FPX",
+      "amount": 50,
+      "date": "2026-06-22 09:14",
+      "type": "topup",
+      "icon": "⬆️",
+      "cat": "topup",
+      "title": "Top Up via FPX",
+      "sub": "Maybank · 9:14 AM"
+    },
+    {
+      "id": 2,
+      "userId": 1,
+      "description": "Canteen - Nasi Lemak",
+      "amount": -3.5,
+      "date": "2026-06-22 07:45",
+      "type": "spend",
+      "icon": "🍱",
+      "cat": "canteen",
+      "title": "Canteen – Nasi Lemak",
+      "sub": "7:45 AM"
+    },
+    {
+      "id": 3,
+      "userId": 2,
+      "description": "Top Up via DuitNow QR",
+      "amount": 50,
+      "date": "2026-06-21 08:00",
+      "type": "topup",
+      "icon": "⬆️",
+      "cat": "topup",
+      "title": "Top Up via DuitNow QR",
+      "sub": "8:00 AM"
+    },
+    {
+      "id": 4,
+      "userId": 2,
+      "description": "School Bookshop",
+      "amount": -12,
+      "date": "2026-06-21 14:10",
+      "type": "spend",
+      "icon": "📚",
+      "cat": "shop",
+      "title": "School Bookshop",
+      "sub": "2:10 PM"
+    },
+    {
+      "id": 5,
+      "userId": 3,
+      "description": "Canteen - Mee Goreng",
+      "amount": -3,
+      "date": "2026-06-19 07:42",
+      "type": "spend",
+      "icon": "🍱",
+      "cat": "canteen",
+      "title": "Canteen – Mee Goreng",
+      "sub": "7:42 AM"
+    },
+    {
+      "id": 6,
+      "userId": 1,
+      "description": "Top Up via Credit Card",
+      "amount": 50,
+      "date": "2026-06-18 10:30",
+      "type": "topup",
+      "icon": "⬆️",
+      "cat": "topup",
+      "title": "Top Up via Credit Card",
+      "sub": "10:30 AM"
+    }
+  ],
+  "reports": [
+    {
+      "id": 1,
+      "reporterName": "Ahmad Bin Abdullah",
+      "child": "Muhammad Faris",
+      "type": "damaged",
+      "subject": "Card not scanning at canteen",
+      "description": "The card stopped working at the canteen reader this morning, edges look cracked.",
+      "status": "Open",
+      "createdAt": "2026-06-20 09:12"
+    }
+  ],
+  "adminNextId": 5,
+  "txnNextId": 7,
+  "reportNextId": 2
+}

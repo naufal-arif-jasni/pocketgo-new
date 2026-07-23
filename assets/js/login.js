@@ -31,6 +31,14 @@ function setLoginRole(role) {
   }
 }
 
+function quickFill(email, password, role) {
+  setLoginRole(role);
+  const emailEl = document.getElementById('login-email');
+  const passEl = document.getElementById('login-pass');
+  if (emailEl) emailEl.value = email;
+  if (passEl) passEl.value = password;
+}
+
 async function doLogin() {
   const id = document.getElementById('login-email').value.trim();
   const pass = document.getElementById('login-pass').value;

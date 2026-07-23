@@ -181,7 +181,7 @@ require_once 'db_conn.php';
       <div class="pos-clock" id="pos-clock-display"><i class="bi bi-clock me-1"></i> --:--:--</div>
       <a href="scan.php" class="btn btn-sm btn-outline-light" style="border-radius: 8px; font-weight: 600;"><i class="bi bi-qr-code-scan me-1"></i> Terminal Scanner</a>
       <a href="dashboard.php" class="btn btn-sm btn-outline-light" style="border-radius: 8px; font-weight: 600;"><i class="bi bi-house me-1"></i> Parent Portal</a>
-      <a href="login.php" class="btn btn-sm btn-danger" style="border-radius: 8px; font-weight: 600; background-color: var(--pos-primary);"><i class="bi bi-box-arrow-right me-1"></i> Exit</a>
+      <a href="index.php" class="btn btn-sm btn-danger" style="border-radius: 8px; font-weight: 600; background-color: var(--pos-primary);"><i class="bi bi-box-arrow-right me-1"></i> Exit</a>
     </div>
   </header>
 

@@ -28,10 +28,19 @@ require_once 'db_conn.php';
         <p class="subtitle">Select your login portal to continue</p>
 
         <!-- Role Selector Tabs -->
-        <div style="display:flex;background:#f0f0f5;border-radius:12px;padding:4px;margin-bottom:22px;gap:2px;">
-          <button id="login-role-parent" style="flex:1;border:none;padding:9px 6px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.78rem;cursor:pointer;transition:all .2s;" onclick="setLoginRole('parent')"><i class="bi bi-people-fill me-1"></i> Parent</button>
-          <button id="login-role-vendor" style="flex:1;border:none;padding:9px 6px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.78rem;cursor:pointer;transition:all .2s;" onclick="setLoginRole('vendor')"><i class="bi bi-shop me-1"></i> POS Canteen</button>
-          <button id="login-role-admin" style="flex:1;border:none;padding:9px 6px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.78rem;cursor:pointer;transition:all .2s;" onclick="setLoginRole('admin')"><i class="bi bi-shield-lock-fill me-1"></i> Admin</button>
+        <div style="display:flex;background:#f0f0f5;border-radius:12px;padding:4px;margin-bottom:16px;gap:2px;">
+          <button id="login-role-parent" style="flex:1;border:none;padding:9px 6px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .2s;" onclick="setLoginRole('parent')"><i class="bi bi-people-fill me-1"></i> Parent Portal</button>
+          <button id="login-role-admin" style="flex:1;border:none;padding:9px 6px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.82rem;cursor:pointer;transition:all .2s;" onclick="setLoginRole('admin')"><i class="bi bi-shield-lock-fill me-1"></i> Admin Portal</button>
+        </div>
+
+        <!-- Demo Seed Credentials Box -->
+        <div style="background:#f8fafc;border:1px dashed #cbd5e1;border-radius:10px;padding:10px 12px;margin-bottom:18px;font-size:0.78rem;color:#475569;">
+          <div style="font-weight:700;margin-bottom:4px;color:#1e293b;"><i class="bi bi-key-fill text-warning me-1"></i> Quick Logins & Shortcuts:</div>
+          <div style="display:flex;flex-wrap:wrap;gap:6px;">
+            <button type="button" style="background:#fff;border:1px solid #cbd5e1;border-radius:6px;padding:4px 8px;font-size:0.74rem;cursor:pointer;font-weight:600;" onclick="quickFill('ahmad@email.com','password123','parent')"><i class="bi bi-person me-1"></i> Parent</button>
+            <button type="button" style="background:#fff;border:1px solid #cbd5e1;border-radius:6px;padding:4px 8px;font-size:0.74rem;cursor:pointer;font-weight:600;" onclick="quickFill('Admin1','12345','admin')"><i class="bi bi-shield-lock me-1"></i> Admin</button>
+            <a href="pos.php" style="background:#fef2f2;border:1px solid #fecaca;color:#dc2626;border-radius:6px;padding:4px 8px;font-size:0.74rem;font-weight:700;text-decoration:none;"><i class="bi bi-shop me-1"></i> POS Canteen (Direct Access)</a>
+          </div>
         </div>
 
         <div class="form-group">

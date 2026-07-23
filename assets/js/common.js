@@ -114,6 +114,81 @@ function getModernIcon(emojiOrCat) {
   return mapping[key] || mapping[key.toLowerCase()] || `<i class="bi bi-arrow-right"></i>`;
 }
 
+// ── TIMESTAMP & TRANSACTION SUBTITLE FORMATTER ──
+function formatTxnSub(t) {
+  if (!t) return '';
+  let prefix = '';
+  let rawTime = '';
+
+  if (t.sub && typeof t.sub === 'string') {
+    const parts = t.sub.split('·');
+    if (parts.length > 1) {
+      prefix = parts[0].trim() + ' · ';
+      rawTime = parts[1].trim();
+    } else {
+      if (!t.sub.match(/\d{4}-\d{2}-\d{2}/) && !t.sub.match(/^\d{1,2}:\d{2}/)) {
+        prefix = t.sub.trim() + ' · ';
+      } else {
+        rawTime = t.sub.trim();
+      }
+    }
+  }
+
+  if (rawTime && (rawTime.includes('AM') || rawTime.includes('PM'))) {
+    return prefix + rawTime;
+  }
+
+  const dateToParse = rawTime || t.date || '';
+  if (!dateToParse) return prefix ? prefix.replace(/ · $/, '') : '';
+
+  const match = dateToParse.match(/(\d{1,2}):(\d{2})/);
+  if (match) {
+    let hrs = parseInt(match[1], 10);
+    const mins = match[2];
+    const ampm = hrs >= 12 ? 'PM' : 'AM';
+    hrs = hrs % 12 || 12;
+    return prefix + `${hrs}:${mins} ${ampm}`;
+  }
+
+  const d = new Date(dateToParse.replace(' ', 'T'));
+  if (!isNaN(d.getTime())) {
+    const formatted = d.toLocaleTimeString('en-MY', { hour: 'numeric', minute: '2-digit', hour12: true });
+    return prefix + formatted;
+  }
+
+  return t.sub || t.date || '';
+}
+
+function getDateLabel(dateStr) {
+  if (!dateStr) return 'Today';
+  
+  let datePart = dateStr.trim();
+  if (datePart.includes('T')) {
+    datePart = datePart.split('T')[0];
+  } else if (datePart.includes(' ')) {
+    datePart = datePart.split(' ')[0];
+  }
+
+  const today = new Date().toISOString().slice(0, 10);
+  const yesterday = new Date(Date.now() - 86400000).toISOString().slice(0, 10);
+
+  if (datePart === today) return 'Today';
+  if (datePart === yesterday) return 'Yesterday';
+
+  const parts = datePart.split('-');
+  if (parts.length === 3) {
+    const year = parseInt(parts[0], 10);
+    const month = parseInt(parts[1], 10) - 1;
+    const day = parseInt(parts[2], 10);
+    const d = new Date(year, month, day);
+    if (!isNaN(d.getTime())) {
+      return d.toLocaleDateString('en-MY', { day: 'numeric', month: 'short', year: 'numeric' });
+    }
+  }
+
+  return datePart;
+}
+
 // ── PASSWORD VISIBILITY TOGGLE ──
 function togglePasswordVisibility(inputId, btnEl) {
   const input = document.getElementById(inputId);
