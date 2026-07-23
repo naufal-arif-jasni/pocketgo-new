@@ -402,6 +402,72 @@ require_once 'auth.php';
   </div>
 </div>
 
+<!-- MODAL: NFC TAP & CARD MATCH VERIFICATION TERMINAL -->
+<div class="modal-overlay" id="modal-nfc-verify" onclick="cancelNfcVerification()">
+  <div class="modal-sheet" style="max-width: 460px; border-radius: 24px;" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title" style="text-align:center; display:flex; align-items:center; justify-content:center; gap:8px; font-size:1.1rem; color:#1e1e2f;">
+      <i class="bi bi-cpu-fill text-primary"></i> NFC Card Verification Terminal
+    </div>
+    <p style="text-align:center; font-size:.82rem; color:#64748b; margin-bottom:14px;">
+      Physical tap and card serial verification required before completing top-up.
+    </p>
+
+    <!-- Target Card Summary Info Box -->
+    <div class="mb-3" style="background:#f8fafc; border:1.5px solid #e2e8f0; border-radius:14px; padding:12px 16px;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:4px;">
+        <span style="font-size:0.72rem; color:#64748b; font-weight:700; text-transform:uppercase; letter-spacing:0.5px;">Required Student Card</span>
+        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-2.5 py-1" style="font-size:0.75rem; font-weight:700;" id="tu-target-amount-badge">RM 50.00</span>
+      </div>
+      <div style="font-weight:800; font-size:1.05rem; color:#0f172a;" id="tu-target-student-name">Muhammad Faris</div>
+      <div style="display:flex; justify-content:space-between; font-size:0.82rem; color:#475569; margin-top:4px;">
+        <span>Target Card Serial: <strong style="font-family:monospace; color:#3b82f6;" id="tu-target-card-uid">1000000001</strong></span>
+        <span id="tu-target-student-class" style="font-weight:600;">4 Amanah</span>
+      </div>
+    </div>
+
+    <!-- Hidden focus input for hardware USB RFID scanner stream -->
+    <form id="tu-rfid-form" onsubmit="handleTopupRfidSubmit(event)">
+      <input type="text" id="topup-rfid-input" class="hidden-input" autocomplete="off">
+    </form>
+
+    <!-- Terminal Status Badge -->
+    <div class="text-center mb-3">
+      <div class="status-badge status-ready" id="tu-terminal-badge">
+        <span class="status-dot"></span>
+        <span id="tu-badge-text">Terminal Ready — Tap Card</span>
+      </div>
+    </div>
+
+    <!-- Pulsing Target Device Graphic -->
+    <div class="rfid-target mb-3" onclick="focusTopupRfid()">
+      <div class="ripple"></div>
+      <div class="ripple ripple-2"></div>
+      <i class="bi bi-credit-card-2-front rfid-icon"></i>
+    </div>
+
+    <!-- Live Verification Status Alert Banner -->
+    <div id="tu-verify-alert" class="alert alert-info py-2 px-3 mb-3 text-center" style="font-size:0.82rem; border-radius:12px; font-weight:500;">
+      <i class="bi bi-broadcast me-1"></i> Place or swipe physical card on NFC scanner...
+    </div>
+
+    <!-- Previews & Test Simulation Swipes -->
+    <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:12px; padding:10px 12px; margin-bottom:16px;">
+      <div style="font-size:0.72rem; font-weight:700; color:#64748b; text-transform:uppercase; margin-bottom:8px; display:flex; justify-content:space-between; align-items:center;">
+        <span><i class="bi bi-broadcast me-1"></i> Previews & Test Simulation Swipes</span>
+        <span style="font-weight:500; text-transform:none; font-size:0.68rem; color:#94a3b8;">Click button to emulate tap</span>
+      </div>
+      <div id="tu-sim-buttons-container" style="display:flex; flex-wrap:wrap; gap:6px;">
+        <!-- Dynamically populated buttons -->
+      </div>
+    </div>
+
+    <div class="d-flex gap-2">
+      <button type="button" class="btn btn-outline-secondary w-100 py-2.5" style="border-radius:12px; font-weight:600; font-size:0.88rem;" onclick="cancelNfcVerification()">Cancel Transaction</button>
+    </div>
+  </div>
+</div>
+
 <div class="toast" id="toast-el"></div>
 
 <script src="assets/js/store.js"></script>

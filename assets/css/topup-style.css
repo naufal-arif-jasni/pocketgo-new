@@ -509,4 +509,134 @@
   border-color: #C8102E;
 }
 
+/* RFID NFC Terminal Modal Styles */
+.status-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-weight: 600;
+  font-size: 0.85rem;
+  transition: all 0.3s ease;
+}
+.status-ready {
+  background-color: rgba(46, 196, 182, 0.12);
+  color: #11998e;
+}
+.status-loading {
+  background-color: rgba(67, 97, 238, 0.12);
+  color: #3a56d4;
+}
+.status-matched {
+  background-color: rgba(34, 197, 94, 0.15);
+  color: #15803d;
+}
+.status-unregistered {
+  background-color: rgba(239, 68, 68, 0.15);
+  color: #b91c1c;
+}
+.status-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  margin-right: 8px;
+  display: inline-block;
+}
+.status-ready .status-dot {
+  background-color: #2ec4b6;
+  animation: pulse-green 1.5s infinite;
+}
+.status-loading .status-dot {
+  background-color: #4361ee;
+}
+.status-matched .status-dot {
+  background-color: #16a34a;
+}
+.status-unregistered .status-dot {
+  background-color: #dc2626;
+}
+@keyframes pulse-green {
+  0% { transform: scale(0.9); opacity: 0.6; }
+  50% { transform: scale(1.2); opacity: 1; box-shadow: 0 0 10px rgba(46, 196, 182, 0.5); }
+  100% { transform: scale(0.9); opacity: 0.6; }
+}
+
+.rfid-target {
+  position: relative;
+  width: 120px;
+  height: 120px;
+  background: radial-gradient(circle, #f8f9ff 0%, #edf1ff 100%);
+  border: 2px dashed #cfd7f5;
+  border-radius: 50%;
+  margin: 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.rfid-target:hover {
+  border-color: #4361ee;
+  transform: scale(1.02);
+}
+.rfid-icon {
+  font-size: 2.6rem;
+  color: #4361ee;
+  z-index: 2;
+}
+.ripple {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border: 1px solid rgba(67, 97, 238, 0.3);
+  border-radius: 50%;
+  animation: ripple-pulse 2s infinite linear;
+  z-index: 1;
+}
+.ripple-2 {
+  animation-delay: 1s;
+}
+@keyframes ripple-pulse {
+  0% { transform: scale(1); opacity: 0.8; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.hidden-input {
+  position: absolute;
+  left: -9999px;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+
+.sim-tap-btn {
+  border: 1px solid #cbd5e1;
+  background-color: #ffffff;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #334155;
+}
+.sim-tap-btn:hover {
+  background-color: #f1f5f9;
+  border-color: #94a3b8;
+}
+.sim-tap-btn.match {
+  border-color: #86efac;
+  background-color: #f0fdf4;
+  color: #166534;
+}
+.sim-tap-btn.mismatch {
+  border-color: #fca5a5;
+  background-color: #fef2f2;
+  color: #991b1b;
+}
+
+
 
