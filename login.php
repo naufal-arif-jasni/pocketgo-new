@@ -28,9 +28,10 @@ require_once 'db_conn.php';
         <p class="subtitle">Select your login portal to continue</p>
 
         <!-- Role Selector Tabs -->
-        <div style="display:flex;background:#f0f0f5;border-radius:12px;padding:4px;margin-bottom:22px;">
-          <button id="login-role-parent" style="flex:1;border:none;padding:10px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s;" onclick="setLoginRole('parent')"><i class="bi bi-people-fill me-1"></i> Parent Portal</button>
-          <button id="login-role-admin" style="flex:1;border:none;padding:10px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.85rem;cursor:pointer;transition:all .2s;" onclick="setLoginRole('admin')"><i class="bi bi-shield-lock-fill me-1"></i> Admin Portal</button>
+        <div style="display:flex;background:#f0f0f5;border-radius:12px;padding:4px;margin-bottom:22px;gap:2px;">
+          <button id="login-role-parent" style="flex:1;border:none;padding:9px 6px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.78rem;cursor:pointer;transition:all .2s;" onclick="setLoginRole('parent')"><i class="bi bi-people-fill me-1"></i> Parent</button>
+          <button id="login-role-vendor" style="flex:1;border:none;padding:9px 6px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.78rem;cursor:pointer;transition:all .2s;" onclick="setLoginRole('vendor')"><i class="bi bi-shop me-1"></i> POS Canteen</button>
+          <button id="login-role-admin" style="flex:1;border:none;padding:9px 6px;border-radius:10px;font-family:'Poppins',sans-serif;font-weight:600;font-size:.78rem;cursor:pointer;transition:all .2s;" onclick="setLoginRole('admin')"><i class="bi bi-shield-lock-fill me-1"></i> Admin</button>
         </div>
 
         <div class="form-group">

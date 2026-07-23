@@ -17,4 +17,11 @@ function requireAdmin() {
         exit;
     }
 }
+
+function requireVendor() {
+    if (!isset($_SESSION['user_id']) || ($_SESSION['role'] !== 'vendor' && $_SESSION['role'] !== 'admin')) {
+        header('Location: login.php');
+        exit;
+    }
+}
 ?>
